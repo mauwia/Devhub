@@ -21,6 +21,7 @@ const chatRoomSchema=mongoose.Schema({
     },
     startedAt:{type: String,default: Date(Date.now()) },
     lastUpdated: {type: String,default: Date(Date.now()) },
+    lastMessage: {type: String },
     messages:[messagesSchema]
 })
 

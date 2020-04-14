@@ -7,8 +7,9 @@ module.exports={
         const user_id=req.user._id
         try {
             const userRooms=await Chats.find({"chat_users.chat_user_id": user_id})
-                            .select('roomId chat_users lastUpdated')
+                            .select('roomId chat_users lastUpdated ')
                             .populate('chat_users.chat_user_id','_id github.userName profilePic')
+           
             res.status(200).json({
                 total_rooms:userRooms.length,
                 rooms:userRooms
@@ -22,6 +23,7 @@ module.exports={
     getChat:async(req,res,next)=>{
     // Fetch a specific chat of user using user.id
     const roomId=req.params.roomId
+    console.log(roomId)
     try {
         const chat=await Chats.findOne({"roomId": roomId})
                         .populate('chat_users.chat_user_id','_id github.userName profilePic')
