@@ -2,31 +2,36 @@ import React from 'react'
 import Incoming from './Incoming'
 import Outgoing from './Outgoing'
 import {socketCall} from '../../Chatmerge'
-import {GetChat} from '../../Action'
+import {socketGetMessage} from '../../Chatmerge'
+import {GetChat,NewMessage} from '../../Action'
+import socketIOClient from 'socket.io-client';
 import { connect } from 'react-redux'
 class ChatRoom extends React.Component{
-  async componentDidUpdate(){
-    let data=this.props.GetChat(this.props.match.params.id)
-    // console.log(this.props)
+  async UNSAFE_componentWillReceiveProps(nextProps){
+    
+    // if(nextProps.match.params.id != this.props.match.params.id){
+    //   this.props.GetChat(nextProps.match.params.id)
+    //   console.log("now getting proprs")
+    // }
+    
   }
-  // async componentDidMount(){
-  //   let data=await getChat(this.props.match.params.id)
-  //   console.log(data)
-  //   this.setState({data})
-  //   // console.log(this.state)
-  // }
+  
+    componentDidMount(){
+    this.props.GetChat(this.props.match.params.id)
+    socketGetMessage(this.props.NewMessage)
+  }
   state={mess:'',data:{}}
   onSubmit=e=>{
     e.preventDefault()
-    const id=this.props.chat.chat_users[0].chat_user_id
+    const id=this.props.chat.chat_users[1].chat_user_id._id
     // console.log(this.props.chat.chat_users[0].chat_user_id._id)
     const senderId=JSON.parse(localStorage.token).id
-    // console.log(this.state.mess)
+    // console.log(this.state.mess,senderId,id)
     socketCall(this.state.mess,senderId,id)
     this.setState({mess:''})
   }
     messageCheck=(message)=>{
-      let a=JSON.parse(localStorage.token)
+      let a=JSON.parse(localStorage.token) 
       if(a.id===message.sender){
         return <Outgoing text={message.text}/>
       }
@@ -71,4 +76,4 @@ let mapStateToProps=state=>{
     chat:state.Chats.chat
   }
 }
-export default connect(mapStateToProps,{GetChat})(ChatRoom)
+export default connect(mapStateToProps,{GetChat,NewMessage})(ChatRoom)

@@ -4,17 +4,21 @@ import {Link} from 'react-router-dom'
 import {GetChats,GetChat} from '../../Action'
 import { connect } from 'react-redux'
 class ChatList extends React.Component{
-    componentDidMount(){
-      this.props.GetChats()
-    }
+    // componentDidMount(){
+    //   this.props.GetChats()
+    // }
     render(){
         if(!this.props.chats){
           return<div>Loading</div>
         }
+        // if(this.props.chats){
+        //   return <div>Shut the fuckup</div>
+        // }
+        
         let a=JSON.parse(localStorage.token)
         let b=this.props.chats.map(chat=>chat.chat_users.filter(user=>a.id!==user.chat_user_id._id))
         // console.log(b)
-        // console.log(this.props.chats)
+        console.log(this.props.chats)
         return<div className='inbox_people'>
             <div className="inbox_chat">
               {
